@@ -30,7 +30,10 @@ public class InteractionController : MonoBehaviour, ICanInteract
         var ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         Physics.Raycast(ray, out var hit, interactionDistance);
 
-        currentTargetInteractable = hit.collider?.GetComponent<IInteractable>();
+        if (hit.collider != null)
+        {
+            currentTargetInteractable = hit.collider.GetComponent<IInteractable>();
+        }
     }
     private void UpdateInteractionText()
     {

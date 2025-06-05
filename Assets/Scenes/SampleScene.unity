@@ -2255,6 +2255,7 @@ GameObject:
   - component: {fileID: 324735011}
   - component: {fileID: 324735012}
   - component: {fileID: 324735013}
+  - component: {fileID: 324735014}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2393,7 +2394,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   jumpForce: 5
-  baseNumberOfJumps: 3
+  baseNumberOfJumps: 1
   headPivot: {fileID: 2119883646}
   maxLookUp: -60
   maxLookDown: 40
@@ -2403,6 +2404,7 @@ MonoBehaviour:
     m_Bits: 64
   gravity: -9.81
   fallMultiplier: 2.5
+  groundChecker: {fileID: 324735014}
 --- !u!114 &324735013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2420,6 +2422,37 @@ MonoBehaviour:
   interacting: 0
   interactionDistance: 7
   interactionText: {fileID: 1588646146}
+--- !u!114 &324735014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324735000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487978226aec62f499ea0b8b38bf0c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnGroundedChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 324735014}
+        m_TargetAssemblyTypeName: GroundChecker, Assembly-CSharp
+        m_MethodName: CheckGrounded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  raycastPufferRange: 0.5
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -10000,7 +10033,7 @@ GameObject:
   - component: {fileID: 1985395302}
   - component: {fileID: 1985395301}
   - component: {fileID: 1985395300}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: e
   m_TagString: Untagged
   m_Icon: {fileID: 0}

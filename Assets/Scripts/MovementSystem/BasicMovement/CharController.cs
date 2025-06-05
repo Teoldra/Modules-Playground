@@ -35,7 +35,6 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private int baseNumberOfJumps = 1;
     private bool jumpOnCooldown = false;
-    private bool jumpedRecenty = false;
     private bool realeasedJumpButton = true;
     private int numberOfJumps;
     private bool pressJump;
@@ -51,14 +50,35 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float fallMultiplier = 2.5f;
     private bool isGrounded;
-    private float raycastDistance;
+
+    [SerializeField] private BoolGameEvent onGroundedChangedEvent;
+    [SerializeField] private BoolGameEvent onCeilingChangedEvent;
+    private void OnEnable()
+    {
+        onGroundedChangedEvent.RegisterListener(GetIsGrounded);
+        onCeilingChangedEvent.RegisterListener(GetIsCeiling);
+    }
+
+    private void OnDisable()
+    {
+        onGroundedChangedEvent.UnregisterListener(GetIsGrounded);
+        onCeilingChangedEvent.UnregisterListener(GetIsCeiling);
+    }
+
+    public void GetIsGrounded(bool grounded)
+    {
+        isGrounded = grounded;
+    }
+    public void GetIsCeiling(bool ceiling)
+    {
+        isCeiling = ceiling;
+    }
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         baseCharacterCenter = characterController.center;
         baseCharacterHeight = characterController.height;
-        raycastDistance = (characterController.height / 2f) + 0.2f;
         Cursor.lockState = CursorLockMode.Locked;
 
         raycastDistanceCrouching = (characterController.height / 2);
@@ -73,8 +93,6 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
         StateHandle();
         SpeedControl(state);
         CrouchingPlayerHeight();
-        GroundCheck();
-        CeilingCheck();
         ApplyGravity();
         Jumping();
     }
@@ -157,22 +175,7 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
             state = MovementState.Walking;
         }
     }
-    private void GroundCheck()
-    {
-        if (!jumpedRecenty)
-        {
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
-            isGrounded = Physics.Raycast(rayOrigin, Vector3.down, raycastDistance, groundLayer);
-        }
-    }
-    private void CeilingCheck()
-    {
-        if (state == MovementState.Crouching)
-        {
-            Vector3 rayOrigin = transform.position + Vector3.up * rayBegin;
-            isCeiling = Physics.SphereCast(rayOrigin, crouchRadius, Vector3.up, out RaycastHit hit, raycastDistanceCrouching, ceilingLayer);
-        }
-    }
+
     private void ApplyGravity()
     {
         if (!isGrounded)
@@ -192,8 +195,6 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
     {
         if (pressJump && numberOfJumps > 0 && !jumpOnCooldown && realeasedJumpButton && state != MovementState.Crouching)
         {
-            jumpedRecenty = true;
-            StartCoroutine(GroundedCoolDown());
             isGrounded = false;
             numberOfJumps--;
             velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
@@ -220,10 +221,4 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
         yield return new WaitForSeconds(0.2f);
         jumpOnCooldown = false;
     }
-    private IEnumerator GroundedCoolDown()
-    {
-        yield return new WaitForSeconds(0.1f);
-        jumpedRecenty = false;
-    }
-
 }
