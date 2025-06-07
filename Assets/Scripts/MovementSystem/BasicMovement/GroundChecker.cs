@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 
-public class GroundChecker : MonoBehaviour
+public class GroundChecker : CharAccess
 {
     [Header("Ground Check Settings")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float raycastPufferRange = 0.5f;
     [SerializeField] private float objectHeight = 1f;
 
-    [Header("SO Event")]
-    [SerializeField] private BoolGameEvent onGroundedChangedEvent;
 
     private bool lastGroundedState;
 
@@ -16,7 +14,6 @@ public class GroundChecker : MonoBehaviour
     {
         CheckGrounded();
     }
-
     private void CheckGrounded()
     {
         float raycastDistance = objectHeight + raycastPufferRange;
@@ -26,7 +23,8 @@ public class GroundChecker : MonoBehaviour
         if (groundedNow != lastGroundedState)
         {
             lastGroundedState = groundedNow;
-            onGroundedChangedEvent.Raise(groundedNow);
+            charController.charControllerSO.Events.IsGrounded.Invoke(groundedNow);
+            Debug.Log("Fired");
         }
 
         // Debug-Ray visualisieren

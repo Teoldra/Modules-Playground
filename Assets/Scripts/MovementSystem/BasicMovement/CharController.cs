@@ -4,8 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, ISprintable, IJumpable, ICrouchable
+public class CharController : MonoBehaviour, IMoveVelocity, ILookable, ISprintable, IJumpable, ICrouchable
 {
+
+    public CharControllerSO charControllerSO;
     [Header("Movement Settings")]
     [SerializeField] private float baseMoveSpeed = 5f;
     [SerializeField] private float currentSpeed;
@@ -26,9 +28,6 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
     [SerializeField] private float crouchSpeed = 2f;
     [SerializeField] private bool isCeiling;
     [SerializeField] private LayerMask ceilingLayer;
-    float raycastDistanceCrouching;
-    float crouchRadius;
-    float rayBegin;
     private bool isCrouching;
 
     [Header("Jump Settings")]
@@ -49,24 +48,20 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float fallMultiplier = 2.5f;
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
 
-    [SerializeField] private BoolGameEvent onGroundedChangedEvent;
-    [SerializeField] private BoolGameEvent onCeilingChangedEvent;
     private void OnEnable()
     {
-        onGroundedChangedEvent.RegisterListener(GetIsGrounded);
-        onCeilingChangedEvent.RegisterListener(GetIsCeiling);
+        charControllerSO.Events.IsGrounded += GetIsGrounded;
+        charControllerSO.Events.IsCeiling += GetIsCeiling;
     }
-
     private void OnDisable()
     {
-        onGroundedChangedEvent.UnregisterListener(GetIsGrounded);
-        onCeilingChangedEvent.UnregisterListener(GetIsCeiling);
+        charControllerSO.Events.IsGrounded -= GetIsGrounded;
+        charControllerSO.Events.IsCeiling -= GetIsCeiling;
     }
-
     public void GetIsGrounded(bool grounded)
-    {
+    {        
         isGrounded = grounded;
     }
     public void GetIsCeiling(bool ceiling)
@@ -80,10 +75,6 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
         baseCharacterCenter = characterController.center;
         baseCharacterHeight = characterController.height;
         Cursor.lockState = CursorLockMode.Locked;
-
-        raycastDistanceCrouching = (characterController.height / 2);
-        crouchRadius = characterController.radius;
-        rayBegin = -0.5f;
     }
 
     private void Update()
@@ -166,7 +157,7 @@ public partial class CharController : MonoBehaviour, IMoveVelocity, ILookable, I
         {
             state = MovementState.Sprinting;
         }
-        else if (!isGrounded && !isCeiling)
+        else if (!isGrounded)
         {
             state = MovementState.Air;
         }
