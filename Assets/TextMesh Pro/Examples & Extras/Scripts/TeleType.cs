@@ -21,7 +21,7 @@ namespace TMPro.Examples
 
         void Awake()
         {
-            // Get Reference to TextMeshPro Component
+            // PlayerControllerSO Reference to TextMeshPro Component
             m_textMeshPro = GetComponent<TMP_Text>();
             m_textMeshPro.text = label01;
             m_textMeshPro.textWrappingMode = TextWrappingModes.Normal;
@@ -47,11 +47,11 @@ namespace TMPro.Examples
         IEnumerator Start()
         {
 
-            // Force and update of the mesh to get valid information.
+            // Force and update of the mesh to Get valid information.
             m_textMeshPro.ForceMeshUpdate();
 
 
-            int totalVisibleCharacters = m_textMeshPro.textInfo.characterCount; // Get # of Visible Character in text object
+            int totalVisibleCharacters = m_textMeshPro.textInfo.characterCount; // PlayerControllerSO # of Visible Character in text object
             int counter = 0;
             int visibleCount = 0;
 

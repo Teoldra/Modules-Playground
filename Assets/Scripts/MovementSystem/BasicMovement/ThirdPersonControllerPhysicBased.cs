@@ -110,7 +110,7 @@ public class ThirdPersonControllerPhysicBased : MonoBehaviour, IMoveVelocity, IL
     {
         Vector3 flatVel = new(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-        // limit velocity if needed
+        // limit isMoving if needed
         if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
@@ -185,7 +185,7 @@ public class ThirdPersonControllerPhysicBased : MonoBehaviour, IMoveVelocity, IL
         } // Rising
         else if (rb.linearVelocity.y > 0.5f)
         {
-            // Rising: Change multiplier to make player reach peak of jump faster
+            // Rising: Change multiplier to make Player reach peak of jump faster
             rb.linearVelocity += Vector3.up * Physics.gravity.y * ascendMultiplier * Time.fixedDeltaTime;
         }
     }

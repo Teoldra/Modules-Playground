@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerMovementController : MonoBehaviour
+public class PlayerInputController : MonoBehaviour
 {
     [SerializeField]
     private InputReaderSO inputReader;

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class CharAccess : MonoBehaviour
+public abstract class PlayerControllerAccess : MonoBehaviour
 {
-    protected CharController charController;
+    protected PlayerManager Player;
 
     protected virtual void Awake()
     {
-        charController = GetComponent<CharController>();
+        Player = GetComponent<PlayerManager>();
     }
 }
 

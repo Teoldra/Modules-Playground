@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 496b599413bf23240bf0d9858f8fda3a, type: 3}
+  m_Script: {fileID: 11500000, guid: a2dd271657984c9429a044e4c85a952f, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  IsGrounded: 0
-  IsCeiling: 0
+  gravity: -9.81
+  fallMultiplier: 2.5
+  characterController: {fileID: 0}
